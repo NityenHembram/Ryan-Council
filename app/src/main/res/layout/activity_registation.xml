@@ -36,6 +36,16 @@
                 android:layout_marginTop="20dp"
                 android:hint="Enter Name" />
 
+            <TextView
+                android:id="@+id/name_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="11sp"
+                android:textColor="#C10B0B"
+                android:visibility="gone"
+                android:text="show Warning"/>
+
             <EditText
                 android:id="@+id/reg_et_email"
                 android:layout_width="match_parent"
@@ -43,12 +53,32 @@
                 android:layout_marginTop="12dp"
                 android:hint="Enter Email" />
 
+            <TextView
+                android:id="@+id/email_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="11sp"
+                android:textColor="#C10B0B"
+                android:visibility="gone"
+                android:text="show Warning"/>
+
             <EditText
                 android:id="@+id/reg_et_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Enter Password" />
+
+            <TextView
+                android:id="@+id/pass_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="11sp"
+                android:textColor="#C10B0B"
+                android:visibility="gone"
+                android:text="show Warning"/>
 
             <EditText
                 android:id="@+id/reg_et_otp"

@@ -13,11 +13,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.studentBtn.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this,HomeActivity::class.java))
         }
 
         binding.councilBtn.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this,HomeActivity::class.java))
         }
     }
 }
