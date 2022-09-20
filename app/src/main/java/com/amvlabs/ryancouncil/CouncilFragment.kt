@@ -1,59 +1,78 @@
 package com.amvlabs.ryancouncil
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.amvlabs.ryancouncil.adapter.OnItemClickListener
+import com.amvlabs.ryancouncil.adapter.RecyclerViewAdapter
+import com.amvlabs.ryancouncil.databinding.FragmentCouncilBinding
+import com.amvlabs.ryancouncil.utils.UiHandler
+import com.amvlabs.ryancouncil.utils.Utility
+import com.google.android.gms.common.util.DataUtils
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CouncilFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CouncilFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class CouncilFragment : Fragment(),OnItemClickListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var binding:FragmentCouncilBinding
+    lateinit var db:FirebaseFirestore
+    lateinit var collectionReference:CollectionReference
+    var userList = ArrayList<String>()
+    lateinit var adapter:RecyclerViewAdapter
+    lateinit var rv:RecyclerView
+    var uiHandler:UiHandler? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_council, container, false)
+        binding = FragmentCouncilBinding.inflate(inflater,container,false)
+        db = Firebase.firestore
+        collectionReference= db.collection("complains")
+        initRV()
+        readData()
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CouncilFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CouncilFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun initRV() {
+        rv = binding.councilRv
+        rv.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
     }
+
+    private fun readData() {
+        collectionReference.get().addOnSuccessListener {
+            it.documents.forEach {doc ->
+                val coll = doc.id.substringBefore("_")
+                userList.add(coll)
+            }
+            adapter = RecyclerViewAdapter(userList,this)
+            rv.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }.addOnFailureListener {
+            Utility.showToast(requireContext(),it.message.toString())
+        }
+
+
+    }
+
+    override fun onItemClick(item: String) {
+        uiHandler?.openComplainListFragment(item)
+        val manager = activity?.supportFragmentManager?.beginTransaction()
+        val complainListFragment = ComplainListFragment()
+        val bundle = Bundle()
+        bundle.putString("name",item)
+        complainListFragment.arguments = bundle
+        manager?.replace(R.id.fragment_container, complainListFragment)
+        manager?.commit()
+    }
+
 }

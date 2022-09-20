@@ -10,6 +10,7 @@ import com.amvlabs.ryancouncil.databinding.ActivityLoginBinding
 import com.amvlabs.ryancouncil.dialog.LoadingDialog
 import com.amvlabs.ryancouncil.model.UserDetails
 import com.amvlabs.ryancouncil.utils.Constants
+import com.amvlabs.ryancouncil.utils.Constants.USER_TYPE
 import com.amvlabs.ryancouncil.utils.Global
 import com.amvlabs.ryancouncil.utils.Preference
 import com.amvlabs.ryancouncil.utils.Utility
@@ -24,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var db:FirebaseFirestore
     var uid = ""
     var name = ""
+    var user_type = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -31,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = Firebase.firestore
+        readBundle()
 
         binding.loginBtn.setOnClickListener {
             login()
@@ -38,6 +41,14 @@ class LoginActivity : AppCompatActivity() {
 
         binding.regBtn.setOnClickListener {
             startActivity(Intent(this,RegistrationActivity::class.java))
+        }
+    }
+
+    fun readBundle(){
+        val intent = intent.extras
+        val user_type = intent?.getString(USER_TYPE)
+        if (user_type != null) {
+            this.user_type = user_type
         }
     }
 
@@ -56,7 +67,9 @@ class LoginActivity : AppCompatActivity() {
                             val d = doc.id.substringAfter("_")
                             if(uid == d){
                                 name = doc.get("name").toString()
-                                Global.setUserDetails(UserDetails(uid,name))
+                                Preference(baseContext).putString(Constants.USER_NAME,name)
+                                Preference(baseContext).putString(Constants.UID,uid)
+                                Global.setUserDetails(UserDetails(uid,name,user_type))
                                 val intent = Intent(this,HomeActivity::class.java)
                                 intent.putExtra(Constants.USER_NAME,name)
                                 LoadingDialog.hideLoading()
@@ -89,7 +102,5 @@ class LoginActivity : AppCompatActivity() {
                 binding.passWarning.visibility = View.GONE
             }
         }
-
-
     }
 }

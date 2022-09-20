@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CouncilFragment">
+    tools:context=".ComplainListFragment">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/council_rv"
+        android:id="@+id/com_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

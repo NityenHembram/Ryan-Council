@@ -11,6 +11,7 @@ import com.amvlabs.ryancouncil.databinding.FragmentStudentBinding
 import com.amvlabs.ryancouncil.model.ComplainModel
 import com.amvlabs.ryancouncil.utils.Constants
 import com.amvlabs.ryancouncil.utils.Global
+import com.amvlabs.ryancouncil.utils.Preference
 import com.amvlabs.ryancouncil.utils.Utility
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -22,10 +23,11 @@ class StudentFragment : Fragment() {
     lateinit var db:FirebaseFirestore
     var name:String = ""
     var uid:String = ""
+    var complain_count = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentStudentBinding.inflate(layoutInflater)
         db = Firebase.firestore
         readBundle()
@@ -48,14 +50,22 @@ class StudentFragment : Fragment() {
 
     private fun submit() {
         val complain = binding.etComplain.text.toString()
-        val catagory = binding.spinner.selectedItem.toString()
+        val category = binding.spinner.selectedItem.toString()
         if(uid.isNotEmpty() && name.isNotEmpty()) {
-            val com = ComplainModel(name,complain,catagory)
-            db.collection("complains").document("${name}_$uid").set(com).addOnSuccessListener {
-                binding.etComplain.text?.clear()
-                Utility.showToast(requireContext(),"Complain Successfully added.")
-            }.addOnFailureListener {
-                Utility.showToast(requireContext(),"Some Error Occur")
+            val com = ComplainModel(name,complain,category)
+            db.collection("complains").document("${name}_$uid").collection(name).get().addOnSuccessListener {
+                val com = it.documents
+                var i = 0
+                com.forEach {
+                    i++
+                }
+                val complainModel = ComplainModel(name,complain,category)
+                db.collection("complains").document("${name}_$uid").collection(name).document("${name}_${getComplainCount(i)}").set(complainModel).addOnSuccessListener {
+                    binding.etComplain.text?.clear()
+                    Utility.showToast(requireContext(),"Complain Successfully added.")
+                }.addOnFailureListener {
+                    Utility.showToast(requireContext(),"Some Error Occur")
+                }
             }
         }
     }
@@ -64,6 +74,12 @@ class StudentFragment : Fragment() {
         val userDetails = Global.getUserDetails()
         name = userDetails?.name.toString()
         uid = userDetails?.uid.toString()
+    }
+
+    private fun getComplainCount(count:Int):Int{
+        complain_count  = count + 1
+        Preference(requireContext()).putInt(Constants.COM_COUNT,complain_count)
+        return Preference(requireContext()).getInt(Constants.COM_COUNT,0)
     }
 
 }

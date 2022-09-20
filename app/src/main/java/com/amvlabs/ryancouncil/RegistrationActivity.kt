@@ -13,6 +13,7 @@ import com.amvlabs.ryancouncil.model.Credential
 import com.amvlabs.ryancouncil.model.UserDetails
 import com.amvlabs.ryancouncil.utils.Constants
 import com.amvlabs.ryancouncil.utils.Global
+import com.amvlabs.ryancouncil.utils.Preference
 import com.amvlabs.ryancouncil.utils.Utility
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -25,6 +26,7 @@ class RegistrationActivity : AppCompatActivity() {
     private val TAG = RegistrationActivity::class.java.name
     lateinit var binding: ActivityRegistationBinding
     lateinit var auth: FirebaseAuth
+    var user_type = ""
     var db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +34,7 @@ class RegistrationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.regSubBtn.setOnClickListener { registration() }
+        user_type = Preference(baseContext).getString(Constants.USER_TYPE,"").toString()
 
         initialization()
     }
@@ -44,7 +47,7 @@ class RegistrationActivity : AppCompatActivity() {
         val name = binding.etName.text.trim().toString()
         val email = binding.regEtEmail.text.trim().toString()
         val password = binding.regEtPass.text.trim().toString()
-        val uid = ""
+        var uid = ""
         if (name.isNotEmpty()) {
             if (email.isNotEmpty() && Utility.isEmailValid(email)) {
                 if (password.isNotEmpty()) {
@@ -53,12 +56,14 @@ class RegistrationActivity : AppCompatActivity() {
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnSuccessListener { it ->
                             uid = it.user?.uid.toString()
-                            val credential = Credential(name, email)
+                            val credential = Credential(name, email,user_type)
                             Utility.showToast(baseContext, "Registered")
                             db.collection("user").document(it.user?.uid.toString()).set(credential)
                                 .addOnSuccessListener { t ->
+                                    Preference(baseContext).putString(Constants.USER_NAME,name)
+                                    Preference(baseContext).putString(Constants.UID,uid)
                                     LoadingDialog.hideLoading()
-                                    Global.setUserDetails(UserDetails(uid,name))
+                                    Global.setUserDetails(UserDetails(uid,name,user_type))
                                     Utility.showToast(baseContext, "Successful")
                                     startActivity(intent)
                                     finish()

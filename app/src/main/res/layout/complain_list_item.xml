@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_cell"
+        android:elevation="23dp"
+        app:contentPaddingRight="3dp"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/com_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="complain"
+                android:textSize="20sp"
+                android:layout_marginStart="19dp"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="9dp"
+                app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
