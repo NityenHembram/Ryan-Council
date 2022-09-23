@@ -66,11 +66,12 @@ class LoginActivity : AppCompatActivity() {
                         documents.forEach{ doc ->
                             val d = doc.id.substringAfter("_")
                             if(uid == d){
-                                name = doc.get("name").toString()
+                                name = doc.id.substringBefore("_")
                                 Preference(baseContext).putString(Constants.USER_NAME,name)
                                 Preference(baseContext).putString(Constants.UID,uid)
                                 Global.setUserDetails(UserDetails(uid,name,user_type))
                                 val intent = Intent(this,HomeActivity::class.java)
+                                intent.putExtra(Constants.USER_TYPE,user_type)
                                 intent.putExtra(Constants.USER_NAME,name)
                                 LoadingDialog.hideLoading()
                                 startActivity(intent)

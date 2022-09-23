@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 class HomeActivity : AppCompatActivity(), UiHandler {
     lateinit var actionbar: ActionBar
     lateinit var auth: FirebaseAuth
-    val user_type = ""
+    var user_type = ""
     lateinit var manager: FragmentTransaction
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +30,7 @@ class HomeActivity : AppCompatActivity(), UiHandler {
         val councilFragment = CouncilFragment()
         councilFragment.uiHandler = this
         manager = supportFragmentManager.beginTransaction()
+        readBundle()
         if (user_type.equals("student", true)) {
             val studentFragment = StudentFragment()
             manager.replace(R.id.fragment_container, studentFragment)
@@ -39,6 +40,11 @@ class HomeActivity : AppCompatActivity(), UiHandler {
             manager.replace(R.id.fragment_container, councilFragment)
             manager.commit()
         }
+    }
+
+    private fun readBundle() {
+        val intent = intent.extras
+        user_type = intent?.getString(Constants.USER_TYPE,"").toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -58,9 +64,9 @@ class HomeActivity : AppCompatActivity(), UiHandler {
 
     private fun logout() {
         auth.signOut()
-        startActivity(Intent(this, LoginActivity::class.java))
         Preference(baseContext).myEdit.clear().apply()
         Global.setUserDetails(null)
+        startActivity(Intent(this,MainActivity::class.java))
         finish()
     }
 

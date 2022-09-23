@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SuggestionFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="77dp"
+        android:layout_marginStart="20dp"
+        android:text="*Suggesion" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etSuggestion"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="20dp"
+        android:background="#d3d7b6"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:maxLines="100"
+        android:minLines="2"
+        android:scrollbars="vertical"
+        android:textColor="@color/black" />
+
+    <RadioGroup
+        android:id="@+id/rb_group"
+        android:layout_below="@+id/etSuggestion"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#5702F4"
+            android:text="Solved" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#7BF402"
+            android:text="Inprogress" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#F40202"
+            android:text="Reject" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_below="@+id/rb_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="33dp"
+        android:text="Button" />
+
+
+</RelativeLayout>

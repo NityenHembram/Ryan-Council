@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import com.amvlabs.ryancouncil.model.UserDetails
 import com.amvlabs.ryancouncil.utils.Constants
+import com.amvlabs.ryancouncil.utils.Constants.USER_NAME
 import com.amvlabs.ryancouncil.utils.Constants.USER_TYPE
 import com.amvlabs.ryancouncil.utils.Global
 import com.amvlabs.ryancouncil.utils.Preference
@@ -20,8 +21,11 @@ class SplashScreenActivity : AppCompatActivity() {
             val name = Preference(baseContext).getString(Constants.USER_NAME,"")
             val user_type = Preference(baseContext).getString(USER_TYPE,"")
             if(uid?.isNotEmpty() == true && name?.isNotEmpty() == true){
-                val intent = Intent(this,HomeActivity::class.java)
                 Global.setUserDetails(UserDetails(uid,name,user_type))
+                val intent = Intent(this,HomeActivity::class.java)
+                intent.putExtra(USER_NAME,name)
+                intent.putExtra(Constants.UID,uid)
+                intent.putExtra(USER_TYPE,user_type)
                 startActivity(intent)
                 finish()
             }else{

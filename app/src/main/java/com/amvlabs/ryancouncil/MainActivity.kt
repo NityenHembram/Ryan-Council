@@ -16,9 +16,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userDetails = Global.getUserDetails()
-        if(userDetails != null){
-            startActivity(Intent(this,HomeActivity::class.java))
+        val uid = Preference(baseContext).getString(Constants.UID,"")
+        val userType = Preference(baseContext).getString(Constants.USER_TYPE,"")
+        if(uid?.isNotEmpty() == true && userType?.isNotEmpty() == true){
+            val intent = Intent(this,HomeActivity::class.java)
+            intent.putExtra(Constants.UID,uid)
+            intent.putExtra(Constants.USER_TYPE,userType)
+            startActivity(intent)
             finish()
         }
 
