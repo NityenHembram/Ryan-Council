@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
-        db = Firebase.firestore
+        db = FirebaseFirestore.getInstance()
         readBundle()
 
         binding.loginBtn.setOnClickListener {
@@ -62,22 +62,30 @@ class LoginActivity : AppCompatActivity() {
                     uid = it.user?.uid.toString()
                     Log.d("car", "login: $uid")
                     db.collection("complains").get().addOnSuccessListener { Q->
-                        val documents = Q.documents
-                        documents.forEach{ doc ->
-                            val d = doc.id.substringAfter("_")
-                            if(uid == d){
-                                name = doc.id.substringBefore("_")
-                                Preference(baseContext).putString(Constants.USER_NAME,name)
-                                Preference(baseContext).putString(Constants.UID,uid)
-                                Global.setUserDetails(UserDetails(uid,name,user_type))
-                                val intent = Intent(this,HomeActivity::class.java)
-                                intent.putExtra(Constants.USER_TYPE,user_type)
-                                intent.putExtra(Constants.USER_NAME,name)
-                                LoadingDialog.hideLoading()
-                                startActivity(intent)
-                                finish()
+                        LoadingDialog.hideLoading()
+                        if(user_type == "student"){
+                            val documents = Q.documents
+                            Log.d("TAG", "login: ${documents.size}")
+                            documents.forEach{ doc ->
+                                val d = doc.id.substringAfter("_")
+                                if(uid == d){
+                                    name = doc.id.substringBefore("_")
+                                    Preference(baseContext).putString(Constants.USER_NAME,name)
+                                    Preference(baseContext).putString(Constants.UID,uid)
+                                    Global.setUserDetails(UserDetails(uid,name,user_type))
+                                    val intent = Intent(this,HomeActivity::class.java)
+                                    intent.putExtra(Constants.USER_TYPE,user_type)
+                                    intent.putExtra(Constants.USER_NAME,name)
+                                    startActivity(intent)
+                                    finish()
+                                }
                             }
+                        }else{
+                            val intent = Intent(this,HomeActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
+
                     }.addOnFailureListener { p ->
                         LoadingDialog.hideLoading()
                         Utility.showToast(this,p.message.toString())

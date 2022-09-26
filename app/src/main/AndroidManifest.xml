@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.amvlabs.ryancouncil">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,11 +16,26 @@
         android:theme="@style/Theme.RyanCouncil"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ComplainDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ComplainListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SuggestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CouncilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.StudentActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,9 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>

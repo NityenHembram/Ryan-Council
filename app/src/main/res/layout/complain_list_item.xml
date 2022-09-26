@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <RelativeLayout
+            android:id="@+id/com_item_cell"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
@@ -28,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="9dp"
+                android:visibility="gone"
                 app:srcCompat="@drawable/ic_baseline_arrow_drop_down_24" />
 
         </RelativeLayout>

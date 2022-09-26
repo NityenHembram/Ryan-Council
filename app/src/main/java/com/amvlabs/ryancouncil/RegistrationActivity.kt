@@ -65,6 +65,7 @@ class RegistrationActivity : AppCompatActivity() {
                                     LoadingDialog.hideLoading()
                                     Global.setUserDetails(UserDetails(uid,name,user_type))
                                     Utility.showToast(baseContext, "Successful")
+                                    intent.putExtra(Constants.USER_TYPE,user_type)
                                     startActivity(intent)
                                     finish()
                                 }.addOnFailureListener { e ->
